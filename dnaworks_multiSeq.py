@@ -31,18 +31,18 @@ def gen_dict(prot_file):
     return prot_dict
  
 ### The multi-threads DNAworks function
-def dnaworks_proc(item,index,outfasta,outdna,cap_sequence,tail_sequence):
+def dnaworks_proc(item,index,outfasta,outdna,cap_sequence,tail_sequence,codon):
 
     inp="tmp"+str(index)+".inp"
     logname="ID"+str(index)+".dna"
     with open(inp,'a') as tmp:
     #specify the directives of DNAworks. you can specify your custom directives by changing the fllowing lines
         tmp.write('title '+"sample"+"\n")
-        tmp.write("logfile "+logname+"\n")
+        tmp.write("logfile "+ logname + "\n")
         #tmp.write("length low 180\n")
-        tmp.write("codon S. cerevesiae\n")
+        tmp.write("codon " + codon +"\n")
         tmp.write("protein\n")
-        tmp.write(" "+item[1]+"\n //")
+        tmp.write(" " + item[1] + "\n //")
     #run DNAworks    
     os.system("dnaworks %s" %inp)
     os.system("rm %s" %inp)
@@ -91,6 +91,14 @@ if __name__ == "__main__":
             dest="Nproc",
             default="1",
             help="Number of processes to be started. The capacity of multiprocessing pool. Default=1")
+    
+    parser.add_option("--codon","--codon",
+            action="store",
+            dest="codon",
+            default="E. coli",
+            help="codon [ ecoli2 | E. coli | C. elegans | D. melanogaster | H. sapiens | 
+     M. musculus | R. novegicus | S. cerevesiae | X. laevis | P. pastoris ] Defualt=E. coli")
+    
 
     parser.add_option("-c","--cap",
             action="store",
@@ -130,6 +138,7 @@ if __name__ == "__main__":
     cap_sequence = options.cap_sequence
     tail_sequence = options.tail_sequence
     logfile = options.logfile
+    codon = options.codon
     
     try:
         localday = time.strftime("%Y-%m-%d", time.localtime())
