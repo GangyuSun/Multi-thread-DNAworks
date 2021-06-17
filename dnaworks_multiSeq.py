@@ -29,38 +29,24 @@ def gen_dict(prot_file):
                 content = content + line
     
     return prot_dict
-    #n=1
-    #queue=[]
-    #p = multiprocessing.Pool(processes = 2)
-    #for item in prot_dict.items():
-    #    logname="tmp"+str(n)+".dna"
-    #    inp="tmp"+str(n)+".inp"
-        #case=dnaworks_proc(item,inp,logname)
-        #p=Process(target=dnaworks_proc,args=(item,inp,logname))
-        #queue.append(p)
-    #    p.apply_async(dnaworks_proc,(item,inp,logname,))
-    #    n+=1
-    #pool.close()
-    #for i in range(len(queue)):
-        #queue[i].start()
-
-
-    #run
-
+ 
+### The multi-threads DNAworks function
 def dnaworks_proc(item,index,outfasta,outdna,cap_sequence,tail_sequence):
 
     inp="tmp"+str(index)+".inp"
     logname="ID"+str(index)+".dna"
     with open(inp,'a') as tmp:
-    #with tempfile.TemporaryFile() as tmp:
+    #specify the directives of DNAworks. you can specify your custom directives by changing the fllowing lines
         tmp.write('title '+"sample"+"\n")
         tmp.write("logfile "+logname+"\n")
         #tmp.write("length low 180\n")
         tmp.write("codon S. cerevesiae\n")
         tmp.write("protein\n")
         tmp.write(" "+item[1]+"\n //")
+    #run DNAworks    
     os.system("dnaworks %s" %inp)
     os.system("rm %s" %inp)
+    #extract DNA sequence of DNAworks ouput
     flag=0
     text=''
     with open(logname,"r") as fd_log:
@@ -73,11 +59,15 @@ def dnaworks_proc(item,index,outfasta,outdna,cap_sequence,tail_sequence):
                 text+=line.strip()
     result=filter(lambda ch: ch not in ' \t1234567890', text)
     result="".join(list(result))
+    
+    #specify homologous sequence
     cap_sequence=filter(lambda ch: ch not in ' \t1234567890', cap_sequence)
     cap_sequence="".join(list(cap_sequence))
 
     tail_sequence=filter(lambda ch: ch not in ' \t1234567890', tail_sequence)
     tail_sequence="".join(list(tail_sequence))
+    
+    #
     print("process:DNAWORKS %s finished" %str(item[0])," :%s" %result)
     with open(outfasta,"a") as out_fasta,open(outdna,"a") as out_dna:
         out_fasta.write(str(item[0])+"\n"+str(cap_sequence).upper()+result.upper()+str(tail_sequence).upper()+"\n")
@@ -85,7 +75,7 @@ def dnaworks_proc(item,index,outfasta,outdna,cap_sequence,tail_sequence):
     os.system("rm %s" %logname)
 
 
-###########################################
+############### main #################
 if __name__ == "__main__":
 
     parser = OptionParser(usage="%prog [options] -i <input fasta file> -j <number of processes to use> -a <output fasta file> -d <output DNA list>",
