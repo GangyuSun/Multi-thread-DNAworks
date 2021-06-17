@@ -1,5 +1,5 @@
 # Multi-thread-DNAworks
- DNAworks mutithread processing on single node.
+ DNAworks -- Mutithreads processing on single node.
 
 ### Requirement
 - [DNAworks v3.2.4 David Hoover May 04, 2017](https://github.com/davidhoover/DNAWorks)
