@@ -90,45 +90,44 @@ if __name__ == "__main__":
             action="store",
             dest="Nproc",
             default="1",
-            help="Number of processes to be started. The capacity of multiprocessing pool. Default=1")
+            help="Number of processes to be started. The capacity of multiprocessing pool. Default = 1")
     
     parser.add_option("--codon","--codon",
             action="store",
             dest="codon",
             default="E. coli",
-            help="codon [ ecoli2 | E. coli | C. elegans | D. melanogaster | H. sapiens | 
-     M. musculus | R. novegicus | S. cerevesiae | X. laevis | P. pastoris ] Defualt=E. coli")
+            help="codon [ ecoli2 | E. coli | C. elegans | D. melanogaster | H. sapiens | M. musculus | R. novegicus | S. cerevesiae | X. laevis | P. pastoris ]. Defualt = E. coli")
     
 
     parser.add_option("-c","--cap",
             action="store",
             dest="cap_sequence",
             default="",
-            help="The homologous sequence at the 5'-terminal. Default=None")
+            help="The homologous sequence at the 5'-terminal. Default = None")
 
     parser.add_option("-t","--tail",
             action="store",
             dest="tail_sequence",
             default="",
-            help="The homologous sequence at the 3'-terminal. Default=None")
+            help="The homologous sequence at the 3'-terminal. Default = None")
 
     parser.add_option("-a","--out_fasta",
             action="store",
             dest="outfasta",
             default="out.fasta",
-            help="Write output file in fasta format. Default=out.fasta")
+            help="Write output file in fasta format. Default = out.fasta")
 
     parser.add_option("-d","--out_dna",
             action="store",
             dest="outdna",
             default="out.dna",
-            help="Write dna sequences in a list. Default=out.dna")
+            help="Write dna sequences in a list. Default = out.dna")
 
     parser.add_option("-g","--log",
             action="store",
             dest="logfile",
             default="log",
-            help="Inputs information to be stored. Default=log")
+            help="Inputs information to be stored. Default = log")
 
     (options, args) = parser.parse_args()
     inputfile = options.inputfile
@@ -152,11 +151,12 @@ if __name__ == "__main__":
             fd_log.write("Number of processes to be used: %s" %Nproc +"\n")
             fd_log.write("5' homologous sequence: %s" %cap_sequence +"\n")
             fd_log.write("3' homologous sequence: %s" %tail_sequence +"\n")
+            fd_log.write("Codon optimization: %s" %codon +"\n")
             fd_log.write("\n......\n\n")
 
         pool = multiprocessing.Pool(Nproc)
         for index,item in enumerate(prot_dict.items()):
-            pool.apply_async(dnaworks_proc,(item,index,outfasta,outdna,cap_sequence,tail_sequence,))
+            pool.apply_async(dnaworks_proc,(item,index,outfasta,outdna,cap_sequence,tail_sequence,codon,))
         
         pool.close()
         pool.join()
@@ -171,7 +171,3 @@ if __name__ == "__main__":
   
     except:
         parser.error("Bad directives.\n\nPlease check your input files.\nSee more information by using -h or --help")
-
-
-
-
