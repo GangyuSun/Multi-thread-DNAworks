@@ -147,7 +147,7 @@ if __name__ == "__main__":
         with open(logfile,"w") as fd_log:
             fd_log.write("Job started on %s at %s" %(localday,localtime) +"\n\n")
             fd_log.write("Input file name: %s" %inputfile +"\n")
-            fd_log.write("Number of sequences to be processes: %s" %len(prot_dict) +"\n")
+            fd_log.write("Number of sequences to be processed: %s" %len(prot_dict) +"\n")
             fd_log.write("Number of processes to be used: %s" %Nproc +"\n")
             fd_log.write("5' homologous sequence: %s" %cap_sequence +"\n")
             fd_log.write("3' homologous sequence: %s" %tail_sequence +"\n")
