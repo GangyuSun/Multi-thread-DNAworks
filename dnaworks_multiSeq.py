@@ -51,6 +51,10 @@ def dnaworks_proc(item,index,outfasta,outdna,cap_sequence,tail_sequence,codon):
     text=''
     with open(logname,"r") as fd_log:
         for line in fd_log:
+            if "CODON FREQUENCY TABLE" in line:
+                species = line.split(":")[1]
+    with open(logname,"r") as fd_log:
+        for line in fd_log:
             if "The DNA sequence" in line:
                 flag=1
             if "The oligonucleotide assembly" in line:
@@ -69,6 +73,7 @@ def dnaworks_proc(item,index,outfasta,outdna,cap_sequence,tail_sequence,codon):
     
     #
     print("process:DNAWORKS %s finished" %str(item[0])," :%s" %result)
+    print("Codon table: %s" %species)
     with open(outfasta,"a") as out_fasta,open(outdna,"a") as out_dna:
         out_fasta.write(str(item[0])+"\n"+str(cap_sequence).upper()+result.upper()+str(tail_sequence).upper()+"\n")
         out_dna.write(str(cap_sequence).upper()+result.upper()+str(tail_sequence).upper()+"\n")
