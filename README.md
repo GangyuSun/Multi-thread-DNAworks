@@ -8,7 +8,9 @@
 
 ### Usage
 Firstly, we need to prepare an input file in fasta format containing all the protein sequences we needed.
+For example:
 ```shell
-python [PATH]/dnaworks_multiSeq.py -j<number of threads> -i <INPUT> -a <OUTPUT in fasta format> -d <OUTPUT only dna sequence> -g <OUTPUT log file>
+python [PATH]/dnaworks_multiSeq.py -j<number of threads> -i <INPUT> --codon "E. coli" <OUTPUT in fasta format> -d <OUTPUT only dna sequence> -g <OUTPUT log file>
 ```
+Notice: The content indicated by the --codon directive MUST be enclosed in quotation marks.The quotes can be single or double.
 For more complete information：```python [PATH]/dnaworks_multiSeq.py -h ```
